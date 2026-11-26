@@ -1,0 +1,52 @@
+name: Weekly health check
+
+# Checks that GorkhaPay and News Nepal both still build and are live.
+# Opens (or updates) a "Site health" issue when something is wrong, so you get a GitHub email.
+on:
+  schedule:
+    - cron: "10 18 * * 0"    # Sundays 18:10 UTC, before the weekly autopilot run
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: uniquepoudell/newsnepal
+          path: newsnepal
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Run checks
+        id: checks
+        run: |
+          problems=""
+          python tests/test_build.py || problems="$problems\n- GorkhaPay offline test failed"
+          python scripts/build.py --out /tmp/gp || problems="$problems\n- GorkhaPay build failed"
+          (cd newsnepal && python tests/test_build.py) || problems="$problems\n- News Nepal offline test failed"
+          for url in https://uniquepoudell.github.io/gorkhapay/ https://uniquepoudell.github.io/newsnepal/; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 30 "$url" || echo 000)
+            echo "$url -> $code"
+            [ "$code" = "200" ] || problems="$problems\n- $url returned HTTP $code"
+          done
+          for d in ${{ vars.CUSTOM_DOMAIN }}; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 30 "https://$d/" || echo 000)
+            echo "https://$d/ -> $code"
+            [ "$code" = "200" ] || problems="$problems\n- https://$d/ returned HTTP $code"
+          done
+          printf "%b" "$problems" > /tmp/problems.txt
+          cat /tmp/problems.txt
+      - name: Report problems as an issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ! -s /tmp/problems.txt ]; then echo "All healthy"; exit 0; fi
+          body="$(printf 'The weekly health check found problems on %s:\n\n%s\n\nRun: %s/%s/actions/runs/%s' "$(date -u +%F)" "$(cat /tmp/problems.txt)" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID")"
+          num=$(gh issue list --state open --search "Site health in:title" --json number -q '.[0].number')
+          if [ -n "$num" ]; then gh issue comment "$num" --body "$body"; else gh issue create --title "Site health: problems found" --body "$body" --assignee "${{ github.repository_owner }}"; fi
