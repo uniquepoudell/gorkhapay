@@ -248,9 +248,9 @@
           "why-avoid-hundi"
         ],
         "facts_checked": "2026-11-26",
-        "price_aud": null,
+        "price_aud": 5,
         "stripe_link": "",
-        "price_npr": null,
+        "price_npr": 450,
         "npr_qr_image": ""
       },
       {
@@ -275,9 +275,9 @@
           "send-money-nepal-to-australia"
         ],
         "facts_checked": "2026-11-26",
-        "price_aud": null,
+        "price_aud": 5,
         "stripe_link": "",
-        "price_npr": null,
+        "price_npr": 450,
         "npr_qr_image": ""
       }
     ]
