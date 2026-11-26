@@ -3,6 +3,7 @@
 The weekly routine takes the top unchecked item. Add ideas at the bottom. Remember the hard rules in PLAYBOOK.md.
 
 - [ ] (Hold until August 2027, ahead of the festival season) How to send money to Nepal for Dashain and Tihar without paying extra (timing, comparing early, promos; no invented rates)
+- [ ] Best AUD to NPR rate today: what the mid-market rate means and how to compare quotes (targets the top search term; link the live rate on the home page, no made-up provider rates)
 - [ ] eSewa, Khalti and IME Pay: how receiving money into a Nepali wallet works (link official sites)
 - [ ] Moving savings home when you leave Australia: getting your super back (DASP) and tax refund, explained in general (link ATO; registered tax agent disclaimer; add to related_guides of leaving-australia-checklist)
 - [ ] Student visa money rules in general: what "evidence of funds" means and where to read the official requirement (link Home Affairs; MARA disclaimer)
@@ -15,3 +16,4 @@ The weekly routine takes the top unchecked item. Add ideas at the bottom. Rememb
 - [ ] What to tell parents in Nepal about phone calls asking for the remittance PIN or MTCN (Nepali and English)
 - [ ] Your first week in Australia: TFN, bank and myGov in plain English (link ATO; add to related_guides of arriving-australia-checklist)
 - [ ] Final pay when you quit or leave Australia: what Fair Work says you should get (link fairwork.gov.au; add to related_guides of leaving-australia-checklist)
+- [ ] New to Australia from Nepal: first-week money checklist (TFN, bank account, SIM, OSHC, sending money home), general info with official links

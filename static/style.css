@@ -90,3 +90,7 @@ ul.ticks { list-style: none; padding: 0; }
 ul.ticks li { padding-left: 26px; position: relative; margin: 6px 0; }
 ul.ticks li::before { content: "✓"; position: absolute; left: 4px; color: var(--accent); font-weight: 800; }
 .promo { border-left: 4px solid var(--accent); margin: 24px 0; }
+/* Home page FAQ */
+.faq details { border: 1px solid var(--line); border-radius: var(--radius); padding: .6rem .9rem; margin: .5rem 0; background: var(--surface); }
+.faq summary { cursor: pointer; font-weight: 600; }
+.faq details p { margin: .5rem 0 0; }

@@ -229,6 +229,36 @@ def provider_rows(providers: list[dict]) -> str:
     return "\n".join(rows)
 
 
+HOME_FAQ = [
+    ("What is the cheapest way to send money from Australia to Nepal?",
+     "It changes day to day. Compare how many rupees your family will receive, not just the fee, because a zero-fee "
+     "service can still cost more through a weaker exchange rate. Use the calculator above, then check the final quote "
+     "with the provider before you pay."),
+    ("How long does a transfer to Nepal take?",
+     "Cash pickup and wallet transfers often arrive the same day. Bank deposits can take one to a few business days. "
+     "Each provider shows its expected delivery time before you pay."),
+    ("Is hundi legal?",
+     "No. Sending money outside licensed channels is illegal in Nepal, and remittance businesses in Australia must be "
+     "registered with AUSTRAC. If hundi money goes missing you have no protection."),
+    ("Can my family receive money without a bank account?",
+     "Yes. Many providers pay out as cash at an agent, where the receiver shows ID and the tracking number, or into a "
+     "mobile wallet such as eSewa, Khalti or IME Pay."),
+    ("Does GorkhaPay send the money?",
+     "No. GorkhaPay is a free comparison and guide site. We never take, hold or move your money. You send directly "
+     "with a licensed provider."),
+]
+
+
+def faq_section(items) -> str:
+    """Visible FAQ plus FAQPage structured data for search engines."""
+    qa = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for q, a in items)
+    data = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in items]}
+    ld = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    return (f'<section class="faq"><h2>Common questions</h2>{qa}</section>'
+            f'<script type="application/ld+json">{ld}</script>')
+
+
 def render_index(cfg: dict, rate: dict) -> str:
     s, m = cfg["site"], cfg.get("monetization", {})
     au_np = [p for p in cfg["providers"] if "au-np" in p.get("directions", [])]
@@ -266,6 +296,7 @@ def render_index(cfg: dict, rate: dict) -> str:
   </div>
 </section>
 {ad_unit(m, m.get('adsense_slot_inline', ''), 'Inline ad (AdSense or a direct sponsor)')}
+{faq_section(HOME_FAQ)}
 """
     return page_shell(cfg, s["name"], body, description=s["description"], path="index.html")
 
