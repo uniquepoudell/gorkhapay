@@ -23,6 +23,9 @@ def main():
             assert (out / "guides" / f"{g['slug']}.html").exists()
         index = (out / "index.html").read_text(encoding="utf-8")
         assert "never take, hold or move your money" in index, "disclaimer missing"
+        assert '"@type": "FAQPage"' in index and "Common questions" in index, "home FAQ missing"
+        ld = index.split('<script type="application/ld+json">')[1].split("</script>")[0]
+        assert len(json.loads(ld)["mainEntity"]) == len(build.HOME_FAQ)
         for p in cfg["providers"]:
             if "au-np" in p["directions"]:
                 assert p["name"] in index, f"{p['name']} not on home page"

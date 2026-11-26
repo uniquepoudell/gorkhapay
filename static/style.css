@@ -77,3 +77,8 @@ dd { margin: 0; font-size: .93rem; }
 .foot { border-top: 1px solid var(--line); background: var(--surface); padding: 18px 0 26px; font-size: .86rem; color: var(--muted); }
 .foot a { color: inherit; }
 .disclaimer { max-width: 60em; }
+
+/* Home page FAQ */
+.faq details { border: 1px solid var(--line); border-radius: var(--radius); padding: .6rem .9rem; margin: .5rem 0; background: var(--surface); }
+.faq summary { cursor: pointer; font-weight: 600; }
+.faq details p { margin: .5rem 0 0; }

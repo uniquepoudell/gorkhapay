@@ -24,7 +24,8 @@ owner's name, big decisions go in the weekly report, never weaken a test).
 ## Each day (in order, stop when you've done one meaningful improvement plus any fixes)
 1. **Fix broken builds first.** Check the latest Actions runs in both repos and any open "Site health" issue.
    If a build or deploy is red, find the cause and fix it. This beats everything else.
-2. **Learn what is working.** Use what you can actually see: which pages exist, recent news in the feeds, web
+2. **Learn what is working.** Read `autopilot/MONETIZATION.md` first (income options, target search terms, what
+   not to promote) and keep it up to date when you learn something new. Use what you can actually see: which pages exist, recent news in the feeds, web
    search for what Nepalis in Australia are asking about this week (remittance, students, visas, tax time,
    jobs), and any analytics or Search Console data the owner has connected. Never claim traffic numbers you
    don't have. Write one or two lines of findings in `autopilot/learnings.md` (newest at the top).
