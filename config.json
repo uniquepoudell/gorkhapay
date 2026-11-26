@@ -1,0 +1,220 @@
+{
+  "site": {
+    "name": "GorkhaPay",
+    "tagline": "Compare the cheapest ways to send money between Australia and Nepal",
+    "description": "Free, independent guide to sending money from Australia to Nepal and Nepal to Australia. Compare fees, exchange rates and speed for Wise, Remitly, IME, Prabhu, City Express and Western Union.",
+    "base_url": "https://gorkhapay.com.np",
+    "contact_email": "",
+    "data_checked": "2026-11-26",
+    "facebook_url": "",
+    "sister_site": {
+      "name": "News Nepal",
+      "url": "https://uniquepoudell.github.io/newsnepal/"
+    }
+  },
+  "rate": {
+    "live_url": "https://open.er-api.com/v6/latest/AUD",
+    "fallback_aud_npr": 88.0,
+    "note": "Mid-market rate. Providers add a margin on top, shown in the table as an estimate."
+  },
+  "providers": [
+    {
+      "id": "wise",
+      "name": "Wise",
+      "directions": [
+        "au-np"
+      ],
+      "fee_aud": 1.0,
+      "fee_pct": 1.4,
+      "margin_pct": 0.0,
+      "fee_text": "Fee shown upfront, roughly 1 to 2% of the amount. Uses the mid-market rate.",
+      "speed": "Usually 1 to 2 business days",
+      "payout": [
+        "Bank account"
+      ],
+      "best_for": "Larger bank transfers where you want the real exchange rate",
+      "official_url": "https://wise.com/au/send-money/send-money-to-nepal",
+      "affiliate_url": "",
+      "licensed": "AUSTRAC registered, ASIC regulated in Australia"
+    },
+    {
+      "id": "remitly",
+      "name": "Remitly",
+      "directions": [
+        "au-np"
+      ],
+      "fee_aud": 0.0,
+      "fee_pct": 0.0,
+      "margin_pct": 1.2,
+      "fee_text": "Often no fee on first or larger transfers. Earns on the exchange rate. Express costs more.",
+      "speed": "Express in minutes, Economy in 1 to 3 days",
+      "payout": [
+        "Bank account",
+        "Cash pickup",
+        "Mobile wallet"
+      ],
+      "best_for": "Fast delivery and new-customer promo rates",
+      "official_url": "https://www.remitly.com/au/en/nepal",
+      "affiliate_url": "",
+      "licensed": "AUSTRAC registered"
+    },
+    {
+      "id": "ime",
+      "name": "IME",
+      "directions": [
+        "au-np"
+      ],
+      "fee_aud": 5.0,
+      "fee_pct": 0.0,
+      "margin_pct": 1.0,
+      "fee_text": "Low flat fee, often promotions for Nepal. Check the rate on the day.",
+      "speed": "Often same day",
+      "payout": [
+        "Bank account",
+        "Cash pickup (IME agents)",
+        "IME Pay wallet"
+      ],
+      "best_for": "Cash pickup anywhere in Nepal, including remote districts",
+      "official_url": "",
+      "affiliate_url": "",
+      "licensed": "Nepali company with NRB licence; check its Australian partner is AUSTRAC registered"
+    },
+    {
+      "id": "prabhu",
+      "name": "Prabhu Money Transfer",
+      "directions": [
+        "au-np"
+      ],
+      "fee_aud": 5.0,
+      "fee_pct": 0.0,
+      "margin_pct": 1.0,
+      "fee_text": "Low flat fee. Rates vary by agent and day.",
+      "speed": "Often same day",
+      "payout": [
+        "Bank account",
+        "Cash pickup (Prabhu agents)",
+        "Prabhu Pay wallet"
+      ],
+      "best_for": "Cash pickup through a large Nepal agent network",
+      "official_url": "",
+      "affiliate_url": "",
+      "licensed": "Nepali company with NRB licence; check its Australian partner is AUSTRAC registered"
+    },
+    {
+      "id": "cityexpress",
+      "name": "City Express",
+      "directions": [
+        "au-np"
+      ],
+      "fee_aud": 0.0,
+      "fee_pct": 0.0,
+      "margin_pct": 1.3,
+      "fee_text": "Has run zero-fee offers. Check the exchange rate, which is where the cost sits.",
+      "speed": "Often same day",
+      "payout": [
+        "Bank account",
+        "Cash pickup",
+        "Mobile wallet"
+      ],
+      "best_for": "Zero-fee promotions and cash pickup",
+      "official_url": "https://ctxpress.com/send-money-to-nepal/from-australia",
+      "affiliate_url": "",
+      "licensed": "Nepali company with NRB licence; check its Australian partner is AUSTRAC registered"
+    },
+    {
+      "id": "westernunion",
+      "name": "Western Union",
+      "directions": [
+        "au-np"
+      ],
+      "fee_aud": 5.0,
+      "fee_pct": 0.0,
+      "margin_pct": 2.5,
+      "fee_text": "Fee depends on amount and how you pay. Rate margin is usually higher than online-only services.",
+      "speed": "Cash in minutes, bank in 1 to 3 days",
+      "payout": [
+        "Bank account",
+        "Cash pickup"
+      ],
+      "best_for": "Paying in person with cash at an agent in Australia",
+      "official_url": "https://www.westernunion.com/au/en/send-money-to-nepal.html",
+      "affiliate_url": "",
+      "licensed": "AUSTRAC registered"
+    },
+    {
+      "id": "nepalibank",
+      "name": "Your Nepali bank (SWIFT transfer)",
+      "directions": [
+        "np-au"
+      ],
+      "fee_aud": 0.0,
+      "fee_pct": 0.0,
+      "margin_pct": 0.0,
+      "fee_text": "Bank commission plus SWIFT charges, often NPR 1,500 to 3,000 and up. Ask your bank for the full cost.",
+      "speed": "2 to 5 business days after approval",
+      "payout": [
+        "Australian bank account"
+      ],
+      "best_for": "Approved purposes such as tuition fees, living costs for students, medical bills",
+      "official_url": "https://www.nrb.org.np/",
+      "affiliate_url": "",
+      "licensed": "Commercial banks licensed by Nepal Rastra Bank"
+    },
+    {
+      "id": "wise-receive",
+      "name": "Wise AUD account (to receive)",
+      "directions": [
+        "np-au"
+      ],
+      "fee_aud": 0.0,
+      "fee_pct": 0.0,
+      "margin_pct": 0.0,
+      "fee_text": "Free to hold AUD details. Your Nepali bank still charges its SWIFT fees to send.",
+      "speed": "Arrives when the SWIFT transfer lands",
+      "payout": [
+        "Wise AUD account"
+      ],
+      "best_for": "Receiving in Australia if you don't have an Australian bank account yet",
+      "official_url": "https://wise.com/au/",
+      "affiliate_url": "",
+      "licensed": "AUSTRAC registered, ASIC regulated in Australia"
+    }
+  ],
+  "monetization": {
+    "adsense_client": "",
+    "adsense_slot_top": "",
+    "adsense_slot_inline": "",
+    "featured_agent": {
+      "text": "",
+      "url": ""
+    },
+    "newsletter_url": ""
+  },
+  "guides": [
+    {
+      "slug": "send-money-australia-to-nepal",
+      "title": "How to send money from Australia to Nepal",
+      "summary": "Step by step: choose a provider, verify your ID, add your family's bank or wallet, and pay."
+    },
+    {
+      "slug": "send-money-nepal-to-australia",
+      "title": "How to send money from Nepal to Australia",
+      "summary": "What Nepal Rastra Bank allows, the documents your bank will ask for, and how students pay fees."
+    },
+    {
+      "slug": "cheapest-way-to-send",
+      "title": "How to find the cheapest transfer",
+      "summary": "Why a zero fee can still cost more, and how to compare the amount your family actually receives."
+    },
+    {
+      "slug": "why-avoid-hundi",
+      "title": "Why you should never use hundi",
+      "summary": "Unlicensed transfers are illegal in Nepal and Australia, and you lose all protection if money goes missing."
+    },
+    {
+      "slug": "cash-pickup-vs-bank-vs-wallet",
+      "title": "Cash pickup, bank deposit or eSewa and Khalti?",
+      "summary": "Which payout method suits your family, with the trade-offs in cost and speed."
+    }
+  ]
+}
