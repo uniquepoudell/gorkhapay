@@ -29,13 +29,12 @@ owner's name, big decisions go in the weekly report, never weaken a test).
    search for what Nepalis in Australia are asking about this week (remittance, students, visas, tax time,
    jobs), and any analytics or Search Console data the owner has connected. Never claim traffic numbers you
    don't have. Write one or two lines of findings in `autopilot/learnings.md` (newest at the top).
-3. **Improve one thing**, alternating between the two sites day by day (even day of month = GorkhaPay,
-   odd = News Nepal, unless one has a clearly more valuable task):
+3. **Improve one thing on GorkhaPay.** Since 2026-11-26 News Nepal has its own daily run ("News Nepal CEO daily
+   run", rules in newsnepal `autopilot/PLAYBOOK.md`), so this run improves GorkhaPay every day and does not
+   change newsnepal. Only touch newsnepal if its build is red and its own run has not fixed it. A useful News
+   Nepal idea (for example linking a GorkhaPay guide) goes into newsnepal `autopilot/ROADMAP.md` as a suggestion.
    - GorkhaPay: publish the next guide from `autopilot/content-queue.md`, or refresh an old guide's facts
      against the official source, or improve a page's title, description, FAQ or internal links.
-   - News Nepal: improve feed choice or keyword filters if irrelevant items show up, add a useful explainer or
-     section page with general information, improve page titles and descriptions, or link to GorkhaPay where a
-     money-transfer topic genuinely fits.
 4. **Log it.** Append one row to `autopilot/log.md` in this repo (date, site, change, PR link, problems).
    No GitHub issue on daily runs unless something is broken that needs the owner; then open or update
    a "Site health" issue assigned to `uniquepoudell`.
