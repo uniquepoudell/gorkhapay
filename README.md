@@ -11,6 +11,8 @@ Nepal Rastra Bank licence in Nepal. The site informs and refers people to licens
 - `scripts/build.py`: writes the static site to `public/`, fetching today's AUD/NPR mid-market rate. Python standard library only.
 - `.github/workflows/build.yml`: rebuilds daily and on every push, and publishes to GitHub Pages.
 - `tests/test_build.py`: offline test.
+- `.github/workflows/health-check.yml`: weekly check that GorkhaPay and News Nepal build and are live; opens a "Site health" issue on problems.
+- `autopilot/`: the weekly routine's playbook, content queue and log. `marketing/facebook/`: weekly ready-to-paste posts.
 
 Setup, domains, affiliate signups and income plan: **[GUIDE.md](GUIDE.md)**.
 
