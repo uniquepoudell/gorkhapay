@@ -1,6 +1,6 @@
 # GorkhaPay weekly autopilot playbook
 
-A scheduled Claude session follows this file once a week. Humans can edit it to change what the routine does.
+A scheduled Claude session follows this file once a week (Sundays). Daily runs on the other days follow [DAILY.md](DAILY.md) and cover News Nepal too; the weekly report should summarise the daily rows in log.md since last week. Humans can edit it to change what the routine does.
 
 ## Goal
 Grow useful, trustworthy traffic to GorkhaPay (Nepalis in Australia sending money home, and families in Nepal),
@@ -59,7 +59,7 @@ Quality and trust come before volume.
 ## Waiting on the owner (repeat in the report until done)
 - Products: Stripe account and Payment Links, PDFs on Drive, prices in `config.json` `shop`, Nepal merchant QR
   (steps in SELLING.md). Until then the checklist pages stay hidden.
-- GitHub Pages: Settings > Pages > Source = GitHub Actions, for both repos. Until then the sites aren't live.
+- Google Search Console for both sites, so the runs can see real search queries.
 - Affiliate signups (Wise, Remitly) and pasting the links into `config.json` `affiliate_url`.
 - AdSense, once the site has a custom domain and some content.
 - gorkhapay.com.np approval, then set the `CUSTOM_DOMAIN` Actions variable.
