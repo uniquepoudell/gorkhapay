@@ -156,7 +156,7 @@ def page_shell(cfg: dict, title: str, body: str, *, description: str, path: str,
     if (m.get("adsense_client") or "").strip():
         adsense = (f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
                    f'{esc(m["adsense_client"].strip())}" crossorigin="anonymous"></script>')
-    nav = [("index.html", "Compare"), ("send-money.html", "Send money"), ("guides/index.html", "Guides"),
+    nav = [("index.html", "Compare"), ("send-money.html", "Send money"), ("guides/index.html", "Guides"), ("pay/index.html", "Pay calculator"),
            ("about.html", "About")]
     if products_on_sale(cfg):
         nav.insert(3, ("products/index.html", "Checklists"))
