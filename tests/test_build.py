@@ -35,6 +35,36 @@ def main():
         # affiliate link wins over the official link
         assert build.provider_link({"affiliate_url": "https://a", "official_url": "https://o"}) == "https://a"
         assert not (out / "ads.txt").exists()
+        # shop: nothing on sale yet, so product pages exist but are hidden from search, menu and sitemap
+        for prod in cfg["shop"]["products"]:
+            page = (out / "products" / f"{prod['slug']}.html").read_text(encoding="utf-8")
+            assert 'name="robots" content="noindex"' in page and "Buy now" not in page
+            assert "not tax, legal or migration advice" in page
+        assert "products/" not in (out / "sitemap.xml").read_text() and "Checklists" not in index
+
+    # shop: once the owner fills in prices, a Stripe link and a QR, the product goes on sale
+    sale = json.loads(json.dumps(cfg))
+    sale["site"]["contact_email"] = "hello@example.com"
+    prod = sale["shop"]["products"][0]
+    prod.update(price_aud=9, stripe_link="https://buy.stripe.com/test_123", price_npr=800,
+                npr_qr_image="static/favicon.svg")
+    sale["shop"]["products"][1].update(price_aud=9, stripe_link="not-a-link")  # bad link stays off sale
+    with tempfile.TemporaryDirectory() as tmp:
+        cfg_path = Path(tmp) / "config.json"
+        cfg_path.write_text(json.dumps(sale), encoding="utf-8")
+        out = Path(tmp) / "public"
+        build.build(cfg_path, out)
+        page = (out / "products" / f"{prod['slug']}.html").read_text(encoding="utf-8")
+        assert "noindex" not in page and 'href="https://buy.stripe.com/test_123"' in page
+        assert "A$9" in page and "NPR 800" in page and "hello@example.com" in page
+        assert '"priceCurrency": "AUD"' in page and (out / "static/favicon.svg").exists()
+        other = (out / "products" / f"{sale['shop']['products'][1]['slug']}.html").read_text(encoding="utf-8")
+        assert "noindex" in other and "Buy now" not in other
+        assert "Checklists" in (out / "index.html").read_text(encoding="utf-8")
+        sitemap = (out / "sitemap.xml").read_text()
+        assert prod["slug"] in sitemap and sale["shop"]["products"][1]["slug"] not in sitemap
+        related = (out / "guides" / f"{prod['related_guides'][0]}.html").read_text(encoding="utf-8")
+        assert prod["title"] in related, "product promo missing on related guide"
     print("ok")
 
 

@@ -221,5 +221,65 @@
       "title": "Cash pickup, bank deposit or eSewa and Khalti?",
       "summary": "Which payout method suits your family, with the trade-offs in cost and speed."
     }
-  ]
+  ],
+  "shop": {
+    "_help": "See SELLING.md. A product goes on sale only when price_aud + stripe_link (and/or price_npr + npr_qr_image + a contact) are filled in. Until then its page is hidden from search and the menu.",
+    "npr_contact": "",
+    "products": [
+      {
+        "slug": "leaving-australia-checklist",
+        "title": "Leaving Australia Money Checklist",
+        "title_ne": "अस्ट्रेलिया छोड्नु अघि: पैसा सम्बन्धी चेकलिस्ट",
+        "summary": "A printable step-by-step checklist so you don't leave your final pay, tax refund, super or rental bond behind when you go home to Nepal.",
+        "for_who": "Students, workers and working holiday makers leaving Australia for Nepal, and families helping them.",
+        "format": "Printable PDF, 8 sections, English with Nepali summaries, links to every free official service",
+        "includes": [
+          "A week-by-week timeline from 6 weeks before you fly to after you land in Nepal",
+          "Final pay: what Fair Work says it should include, and what is not paid out",
+          "Tax return: when you can lodge early on paper and when you lodge online from Nepal",
+          "Super (DASP): who can claim, what details you need, the ATO's tax rates, and how it is paid",
+          "Getting your rental bond back, cancelling bills and which bank account to keep open",
+          "Airport rules for carrying AUD 10,000 or more in cash",
+          "Moving your savings home safely, without hundi",
+          "A notes page for fund numbers, dates and receipts"
+        ],
+        "related_guides": [
+          "send-money-australia-to-nepal",
+          "why-avoid-hundi"
+        ],
+        "facts_checked": "2026-11-26",
+        "price_aud": null,
+        "stripe_link": "",
+        "price_npr": null,
+        "npr_qr_image": ""
+      },
+      {
+        "slug": "arriving-australia-checklist",
+        "title": "Arriving in Australia: Money and Work Starter Checklist",
+        "title_ne": "अस्ट्रेलिया आउँदा: पैसा र कामको सुरुवाती चेकलिस्ट",
+        "summary": "What to sort out before you fly from Nepal and in your first weeks: tax file number, bank, super, your pay rights, scams to avoid and sending money home safely.",
+        "for_who": "Students and workers about to move from Nepal to Australia, and parents in Nepal preparing them.",
+        "format": "Printable PDF, 6 sections, English with Nepali summaries, links to every free official service",
+        "includes": [
+          "Before you fly: health cover for students, documents to save, cash declaration rules",
+          "First week: applying for your tax file number for free, bank, phone and myGov",
+          "Starting work: payslips, student work hours, super, and how to check your pay rate",
+          "How to spot fake ATO and myGov messages",
+          "Sending money home with a licensed provider, never hundi",
+          "What to keep now so you can get your tax and super back when you leave",
+          "A notes page for TFN, bank, super and visa details"
+        ],
+        "related_guides": [
+          "send-money-australia-to-nepal",
+          "spot-remittance-scam",
+          "send-money-nepal-to-australia"
+        ],
+        "facts_checked": "2026-11-26",
+        "price_aud": null,
+        "stripe_link": "",
+        "price_npr": null,
+        "npr_qr_image": ""
+      }
+    ]
+  }
 }

@@ -6,6 +6,7 @@ how-to guides, a "send money" page that links to licensed providers, ad slots an
 **GorkhaPay never takes, holds or moves money.** Doing that needs AUSTRAC registration in Australia and a
 Nepal Rastra Bank licence in Nepal. The site informs and refers people to licensed providers only.
 
+- `config.json` `shop`: GorkhaPay's own products. A product page goes public only when its price and payment details are set.
 - `config.json`: providers (fees, speed, links), guides list, money settings, fallback exchange rate.
 - `content/guides/*.html`: the body of each guide. Add a file and an entry in `guides` to publish a new one.
 - `scripts/build.py`: writes the static site to `public/`, fetching today's AUD/NPR mid-market rate. Python standard library only.
@@ -15,6 +16,7 @@ Nepal Rastra Bank licence in Nepal. The site informs and refers people to licens
 - `autopilot/`: the weekly routine's playbook, content queue and log. `marketing/facebook/`: weekly ready-to-paste posts.
 
 Setup, domains, affiliate signups and income plan: **[GUIDE.md](GUIDE.md)**.
+Selling GorkhaPay's own checklists (Stripe, Nepal QR, delivery, GST): **[SELLING.md](SELLING.md)**.
 
 ```bash
 python scripts/build.py                          # writes ./public

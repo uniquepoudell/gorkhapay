@@ -77,3 +77,16 @@ dd { margin: 0; font-size: .93rem; }
 .foot { border-top: 1px solid var(--line); background: var(--surface); padding: 18px 0 26px; font-size: .86rem; color: var(--muted); }
 .foot a { color: inherit; }
 .disclaimer { max-width: 60em; }
+
+/* shop: our own checklist packs */
+.ne-title { font-size: 1.1rem; color: var(--muted); margin: 0 0 8px; }
+.product-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; align-items: start; }
+@media (max-width: 760px) { .product-grid { grid-template-columns: 1fr; } }
+.buy-col { display: grid; gap: 12px; }
+.buy h3 { margin-bottom: 4px; }
+.price { font-size: 1.6rem; font-weight: 800; margin: 4px 0 8px; color: var(--accent); }
+.qr { display: block; width: 220px; max-width: 100%; height: auto; background: #fff; padding: 8px; border-radius: 10px; margin: 6px 0; }
+ul.ticks { list-style: none; padding: 0; }
+ul.ticks li { padding-left: 26px; position: relative; margin: 6px 0; }
+ul.ticks li::before { content: "✓"; position: absolute; left: 4px; color: var(--accent); font-weight: 800; }
+.promo { border-left: 4px solid var(--accent); margin: 24px 0; }

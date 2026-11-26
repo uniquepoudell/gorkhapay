@@ -10,6 +10,7 @@ site to ./public:
   send-money.html       both directions, with links to licensed providers
   guides/index.html     list of how-to guides, plus one page per guide
   about.html            disclaimer, how the site earns money, contact
+  products/             sales pages for GorkhaPay's own checklist packs (Stripe for AUD, Nepal QR for NPR)
   rates.json, sitemap.xml, robots.txt, ads.txt (with AdSense), CNAME (with a domain)
 
 Python standard library only.   Usage: python scripts/build.py [--config config.json] [--out public]
@@ -98,7 +99,55 @@ def featured_box(m: dict) -> str:
     return ""
 
 
-def page_shell(cfg: dict, title: str, body: str, *, description: str, path: str, depth: int = 0) -> str:
+# --------------------------------------------------------------------------- shop (our own digital products)
+
+def npr_contact(cfg: dict) -> str:
+    shop = cfg.get("shop") or {}
+    return (shop.get("npr_contact") or cfg["site"].get("contact_email") or "").strip()
+
+
+def sells_aud(p: dict) -> bool:
+    return bool(p.get("price_aud")) and (p.get("stripe_link") or "").strip().startswith("https://")
+
+
+def sells_npr(cfg: dict, p: dict) -> bool:
+    qr = (p.get("npr_qr_image") or "").strip()
+    return bool(p.get("price_npr")) and bool(qr) and (ROOT / qr).is_file() and bool(npr_contact(cfg))
+
+
+def on_sale(cfg: dict, p: dict) -> bool:
+    return sells_aud(p) or sells_npr(cfg, p)
+
+
+def products_on_sale(cfg: dict) -> list[dict]:
+    return [p for p in (cfg.get("shop") or {}).get("products", []) if on_sale(cfg, p)]
+
+
+def money(amount, currency: str) -> str:
+    a = float(amount)
+    txt = f"{a:,.0f}" if a == int(a) else f"{a:,.2f}"
+    return f"A${txt}" if currency == "AUD" else f"NPR {txt}"
+
+
+def contact_link(c: str) -> str:
+    if "@" in c:
+        return f'<a href="mailto:{esc(c)}">{esc(c)}</a>'
+    if c.startswith("https://"):
+        return f'<a href="{esc(c)}" rel="noopener" target="_blank">{esc(c)}</a>'
+    return esc(c)
+
+
+def product_promo(cfg: dict, guide_slug: str, up: str) -> str:
+    for p in products_on_sale(cfg):
+        if guide_slug in p.get("related_guides", []):
+            return (f'<aside class="box promo"><span class="ad-label">From GorkhaPay</span>'
+                    f'<h2>{esc(p["title"])}</h2><p>{esc(p["summary"])}</p>'
+                    f'<a class="btn" href="{up}products/{esc(p["slug"])}.html">See what\'s inside</a></aside>')
+    return ""
+
+
+def page_shell(cfg: dict, title: str, body: str, *, description: str, path: str, depth: int = 0,
+               noindex: bool = False, head_extra: str = "") -> str:
     s, m = cfg["site"], cfg.get("monetization", {})
     up = "../" * depth
     full_title = f"{title} | {s['name']}" if title != s["name"] else f"{s['name']}: {s['tagline']}"
@@ -109,6 +158,8 @@ def page_shell(cfg: dict, title: str, body: str, *, description: str, path: str,
                    f'{esc(m["adsense_client"].strip())}" crossorigin="anonymous"></script>')
     nav = [("index.html", "Compare"), ("send-money.html", "Send money"), ("guides/index.html", "Guides"),
            ("about.html", "About")]
+    if products_on_sale(cfg):
+        nav.insert(3, ("products/index.html", "Checklists"))
     current = ' aria-current="page"'
     nav_html = "".join(
         f'<a href="{up}{href}"{current if href == path else ""}>{label}</a>' for href, label in nav)
@@ -129,6 +180,7 @@ def page_shell(cfg: dict, title: str, body: str, *, description: str, path: str,
 <title>{esc(full_title)}</title>
 <meta name="description" content="{esc(description)}">
 <link rel="canonical" href="{esc(canonical)}">
+{'<meta name="robots" content="noindex">' if noindex else ''}{head_extra}
 <meta property="og:title" content="{esc(full_title)}">
 <meta property="og:description" content="{esc(description)}">
 <meta property="og:type" content="website">
@@ -261,7 +313,8 @@ medical treatment and visa or migration fees. Ask your bank which documents it n
 and both sender and receiver can face penalties. <a href="guides/why-avoid-hundi.html">Why it matters</a>.</p></section>
 
 <section class="box"><h2>Are you a licensed remittance agent?</h2>
-<p>We list licensed agents serving Nepali communities in Australia. Get in touch to be featured.</p></section>
+<p>We list licensed agents serving Nepali communities in Australia. Get in touch to be featured.
+We check your AUSTRAC registration before any listing goes live.</p></section>
 """
     return page_shell(cfg, "Send money", body, path="send-money.html",
                       description="Send money between Australia and Nepal safely through licensed providers.")
@@ -285,6 +338,7 @@ def render_guide(cfg: dict, g: dict) -> str:
     body = f"""<article class="guide"><p class="crumbs"><a href="index.html">Guides</a></p>
 <h1>{esc(g['title'])}</h1><p class="lead">{esc(g['summary'])}</p>
 {load_guide(g['slug'])}
+{product_promo(cfg, g['slug'], '../')}
 {ad_unit(m, m.get('adsense_slot_inline', ''), 'In-article ad')}
 <p class="muted small">Last checked {esc(cfg['site'].get('data_checked'))}. Rules and fees change, so confirm with your provider or bank.</p>
 <p><a class="btn" href="../index.html">Compare providers</a></p></article>"""
@@ -305,7 +359,8 @@ Providers serving Australia must be registered with AUSTRAC, and money paid out 
 licensed by Nepal Rastra Bank.</p>
 <h2>How we earn money</h2>
 <p>Some provider links are affiliate links: if you sign up through them, the provider may pay us a referral fee.
-This never changes the price you pay. We also show ads and paid listings, which are always labelled.
+This never changes the price you pay. We also show ads and paid listings, which are always labelled,
+and sell our own printable checklists. Everything on the free guides stays free.
 Rankings are not for sale.</p>
 <h2>This is not financial advice</h2>
 <p>Information here is general and may be out of date. Check with the provider, your bank, or a licensed adviser
@@ -313,6 +368,86 @@ before making decisions.</p>
 {contact}</article>"""
     return page_shell(cfg, "About and disclaimer", body, path="about.html",
                       description="About GorkhaPay, how we earn money, and our disclaimer.")
+
+
+def render_product(cfg: dict, p: dict) -> str:
+    s = cfg["site"]
+    includes = "".join(f"<li>{esc(x)}</li>" for x in p.get("includes", []))
+    related = {g["slug"]: g for g in cfg.get("guides", [])}
+    free = "".join(f'<li><a href="../guides/{esc(slug)}.html">{esc(related[slug]["title"])}</a></li>'
+                   for slug in p.get("related_guides", []) if slug in related)
+    buy = []
+    if sells_aud(p):
+        buy.append(f"""<div class="box buy">
+  <h3>Pay in Australian dollars</h3>
+  <p class="price">{money(p['price_aud'], 'AUD')}</p>
+  <p>Card, Apple Pay or Google Pay through Stripe. Your download link appears straight after payment and Stripe emails you a receipt.</p>
+  <a class="btn" href="{esc(p['stripe_link'].strip())}" rel="noopener">Buy now</a>
+</div>""")
+    if sells_npr(cfg, p):
+        c = npr_contact(cfg)
+        buy.append(f"""<div class="box buy">
+  <h3>नेपालबाट रुपैयाँमा तिर्नुहोस् · Pay in Nepal (NPR)</h3>
+  <p class="price">{money(p['price_npr'], 'NPR')}</p>
+  <img class="qr" src="../{esc(p['npr_qr_image'].strip())}" alt="Nepal payment QR code" width="220" height="220">
+  <ol class="small">
+    <li>Scan with your bank app, eSewa, Khalti or any Fonepay app and pay {money(p['price_npr'], 'NPR')}.</li>
+    <li>Send a screenshot of the payment and your email address to {contact_link(c)}.</li>
+    <li>We email you the PDF, usually within one day.</li>
+  </ol>
+</div>""")
+    if not buy:
+        buy.append('<div class="box buy"><h3>Coming soon</h3><p>This checklist is not on sale yet.</p></div>')
+    jsonld = ""
+    if sells_aud(p):
+        data = {"@context": "https://schema.org", "@type": "Product", "name": p["title"],
+                "description": p["summary"], "brand": {"@type": "Brand", "name": s["name"]},
+                "offers": {"@type": "Offer", "price": f"{float(p['price_aud']):.2f}", "priceCurrency": "AUD",
+                           "availability": "https://schema.org/InStock", "url": p["stripe_link"].strip()}}
+        jsonld = f'\n<script type="application/ld+json">{json.dumps(data, ensure_ascii=False)}</script>'
+    body = f"""<article class="product">
+<p class="crumbs"><a href="index.html">Checklists</a></p>
+<h1>{esc(p['title'])}</h1>
+<p class="ne-title">{esc(p.get('title_ne'))}</p>
+<p class="lead">{esc(p['summary'])}</p>
+<div class="product-grid">
+  <div>
+    <h2>What's inside</h2>
+    <ul class="ticks">{includes}</ul>
+    <dl>
+      <div><dt>Format</dt><dd>{esc(p.get('format'))}</dd></div>
+      <div><dt>Who it's for</dt><dd>{esc(p.get('for_who'))}</dd></div>
+      <div><dt>Facts checked</dt><dd>{esc(p.get('facts_checked'))} on official Australian government websites</dd></div>
+    </dl>
+  </div>
+  <div class="buy-col">{''.join(buy)}</div>
+</div>
+<section class="box notice">
+  <h2>Please read before you buy</h2>
+  <p>This is a checklist of general information, not tax, legal or migration advice. Every official service it
+  points to (tax file number, tax return, super claim, bond refund) is free from the government. You are paying for
+  a clear, printable plan in one place. For advice on your own situation, see a registered tax agent or a registered
+  migration agent. Because this is a digital download, please ask us before you buy if you're unsure it suits you.
+  Your rights under Australian Consumer Law still apply.</p>
+</section>
+{f'<section><h2>Free guides on this topic</h2><ul>{free}</ul></section>' if free else ''}
+</article>"""
+    return page_shell(cfg, p["title"], body, path=f"products/{p['slug']}.html", depth=1,
+                      description=p["summary"], noindex=not on_sale(cfg, p), head_extra=jsonld)
+
+
+def render_shop(cfg: dict) -> str:
+    items = []
+    for p in (cfg.get("shop") or {}).get("products", []):
+        status = "" if on_sale(cfg, p) else ' <span class="pill">Coming soon</span>'
+        price = f'<p class="price">{money(p["price_aud"], "AUD")}</p>' if sells_aud(p) else ""
+        items.append(f'<li class="box"><h2><a href="{esc(p["slug"])}.html">{esc(p["title"])}</a>{status}</h2>'
+                     f'<p class="muted small">{esc(p.get("title_ne"))}</p><p>{esc(p["summary"])}</p>{price}</li>')
+    body = ('<section class="hero"><h1>Checklists</h1><p class="lead">Printable money checklists for Nepalis moving to '
+            'or leaving Australia, made by GorkhaPay. English with Nepali summaries.</p></section>'
+            f'<ul class="cards one">{"".join(items)}</ul>')
+    return page_shell(cfg, "Checklists", body, path="products/index.html", depth=1, noindex=not products_on_sale(cfg),
+                      description="Printable money checklists for Nepalis moving to or leaving Australia.")
 
 
 # --------------------------------------------------------------------------- build
@@ -327,6 +462,7 @@ def build(cfg_path: Path, out: Path) -> None:
     if out.exists():
         shutil.rmtree(out)
     (out / "guides").mkdir(parents=True)
+    (out / "products").mkdir()
     shutil.copytree(ROOT / "static", out / "static")
 
     pages = {
@@ -337,13 +473,28 @@ def build(cfg_path: Path, out: Path) -> None:
     }
     for g in cfg.get("guides", []):
         pages[f"guides/{g['slug']}.html"] = render_guide(cfg, g)
+    hidden = set()
+    products = (cfg.get("shop") or {}).get("products", [])
+    if products:
+        pages["products/index.html"] = render_shop(cfg)
+        if not products_on_sale(cfg):
+            hidden.add("products/index.html")
+    for p in products:
+        rel = f"products/{p['slug']}.html"
+        pages[rel] = render_product(cfg, p)
+        if not on_sale(cfg, p):
+            hidden.add(rel)
+        qr = (p.get("npr_qr_image") or "").strip()
+        if qr and sells_npr(cfg, p):
+            (out / qr).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / qr, out / qr)
     for rel, content in pages.items():
         (out / rel).write_text(content, encoding="utf-8")
 
     built = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     (out / "rates.json").write_text(json.dumps({**rate, "built_at": built}, indent=2), encoding="utf-8")
     b = cfg["site"].get("base_url", "").rstrip("/")
-    urls = "".join(f"<url><loc>{esc(b + '/' + rel.replace('index.html', ''))}</loc></url>" for rel in pages)
+    urls = "".join(f"<url><loc>{esc(b + '/' + rel.replace('index.html', ''))}</loc></url>" for rel in pages if rel not in hidden)
     (out / "sitemap.xml").write_text(
         f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>',
         encoding="utf-8")
