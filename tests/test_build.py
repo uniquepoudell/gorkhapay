@@ -35,12 +35,17 @@ def main():
         # affiliate link wins over the official link
         assert build.provider_link({"affiliate_url": "https://a", "official_url": "https://o"}) == "https://a"
         assert not (out / "ads.txt").exists()
-        # shop: nothing on sale yet, so product pages exist but are hidden from search, menu and sitemap
+        # shop: a product is public (menu, sitemap, buy button) only when it is on sale; otherwise hidden
+        sitemap = (out / "sitemap.xml").read_text()
         for prod in cfg["shop"]["products"]:
             page = (out / "products" / f"{prod['slug']}.html").read_text(encoding="utf-8")
-            assert 'name="robots" content="noindex"' in page and "Buy now" not in page
             assert "not tax, legal or migration advice" in page
-        assert "products/" not in (out / "sitemap.xml").read_text() and "Checklists" not in index
+            if build.on_sale(cfg, prod):
+                assert "noindex" not in page and "Buy now" in page and prod["slug"] in sitemap
+            else:
+                assert 'name="robots" content="noindex"' in page and "Buy now" not in page
+                assert prod["slug"] not in sitemap
+        assert ("Checklists" in index) == bool(build.products_on_sale(cfg))
 
     # shop: once the owner fills in prices, a Stripe link and a QR, the product goes on sale
     sale = json.loads(json.dumps(cfg))
@@ -48,7 +53,7 @@ def main():
     prod = sale["shop"]["products"][0]
     prod.update(price_aud=9, stripe_link="https://buy.stripe.com/test_123", price_npr=800,
                 npr_qr_image="static/favicon.svg")
-    sale["shop"]["products"][1].update(price_aud=9, stripe_link="not-a-link")  # bad link stays off sale
+    sale["shop"]["products"][1].update(price_aud=9, stripe_link="not-a-link", price_npr=None)  # bad link stays off sale
     with tempfile.TemporaryDirectory() as tmp:
         cfg_path = Path(tmp) / "config.json"
         cfg_path.write_text(json.dumps(sale), encoding="utf-8")
