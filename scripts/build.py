@@ -156,13 +156,13 @@ def page_shell(cfg: dict, title: str, body: str, *, description: str, path: str,
     if (m.get("adsense_client") or "").strip():
         adsense = (f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
                    f'{esc(m["adsense_client"].strip())}" crossorigin="anonymous"></script>')
-    nav = [("index.html", "Compare"), ("send-money.html", "Send money"), ("guides/index.html", "Guides"), ("pay/index.html", "Pay calculator"),
+    nav = [("index.html", "Compare"), ("send-money.html", "Send money"), ("guides/index.html", "Guides"), ("https://uniquepoudell.github.io/takehome/", "Pay calculator"),
            ("about.html", "About")]
     if products_on_sale(cfg):
         nav.insert(3, ("products/index.html", "Checklists"))
     current = ' aria-current="page"'
     nav_html = "".join(
-        f'<a href="{up}{href}"{current if href == path else ""}>{label}</a>' for href, label in nav)
+        f'<a href="{href if href.startswith("http") else up + href}"{current if href == path else ""}>{label}</a>' for href, label in nav)
     contact = ""
     if s.get("contact_email"):
         contact = f' · <a href="mailto:{esc(s["contact_email"])}">{esc(s["contact_email"])}</a>'
