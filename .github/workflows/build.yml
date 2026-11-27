@@ -36,8 +36,9 @@ jobs:
           CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN }}
           SITE_BASE_URL: ${{ vars.CUSTOM_DOMAIN != '' && format('https://{0}', vars.CUSTOM_DOMAIN) || steps.pages.outputs.base_url }}
         run: python scripts/build.py --out public
-      - name: Test and build the TakeHome pay calculator (served at /pay/)
+      - name: Redirect old /pay/ pages to the TakeHome site
         env:
+          REDIRECT_TO: https://uniquepoudell.github.io/takehome/
           SITE_BASE_URL: ${{ vars.CUSTOM_DOMAIN != '' && format('https://{0}/pay/', vars.CUSTOM_DOMAIN) || format('{0}/pay/', steps.pages.outputs.base_url) }}
         run: |
           python paycheck/tests/test_paycheck.py

@@ -372,10 +372,16 @@ def build(out: Path) -> int:
         p, c = hourly_page(r); pages[p] = c
     for slug in GUIDES:
         p, c = guide_page(slug); pages[p] = c
+    target = os.environ.get("REDIRECT_TO", "").strip()
     for p, c in pages.items():
+        if target:
+            url = target.rstrip("/") + "/" + p
+            c = (f'<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><title>Moved to TakeHome</title>'
+                 f'<link rel="canonical" href="{esc(url)}"><meta http-equiv="refresh" content="0; url={esc(url)}">'
+                 f'<meta name="robots" content="noindex"></head><body><p>This page moved to <a href="{esc(url)}">{esc(url)}</a>.</p></body></html>')
         (out / p).parent.mkdir(parents=True, exist_ok=True)
         (out / p).write_text(c, encoding="utf-8")
-    if base_url():
+    if base_url() and not target:
         urls = "".join(f"<url><loc>{esc(base_url() + p)}</loc></url>" for p in pages)
         (out / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>', encoding="utf-8")
     return len(pages)
