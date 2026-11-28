@@ -12,6 +12,7 @@ Facts below were checked on official pages on 26 November 2026. Fees and rules c
 | --- | --- | --- | --- |
 | Leaving Australia Money Checklist (PDF) | People in Australia | Stripe Payment Link (AUD) | Stripe sends them straight to the download after paying |
 | Arriving in Australia Starter Checklist (PDF) | Students and parents in Nepal, or people already in Australia | Nepal QR (NPR) or Stripe (AUD) | NPR: you email the PDF after checking the payment. AUD: as above |
+| Australian Citizenship Test Practice Pack (PDF, A$9) | Nepali permanent residents preparing for the test | Stripe Payment Link (AUD), NPR optional | As above. Free 10-question sample on News Nepal (`citizenship-test.html`) |
 | Featured agent listing (monthly) | Licensed agents and Nepali businesses in Australia | Stripe subscription Payment Link, sent privately after you vet them | You add their box in `config.json` |
 | Sponsorship (one-off) | Businesses | Stripe invoice | You add their ad or mention |
 
@@ -146,3 +147,13 @@ Dashboard and add it as a secret in your Claude cloud environment settings (neve
 - [ ] Customer Portal on, featured listing product ready (send privately after vetting)
 - [ ] Tax settings: head office, inclusive pricing, tax codes (automatic tax stays off until GST registration)
 - [ ] Ask a Nepali speaker to proofread the Nepali summaries in the PDFs
+
+## Citizenship practice pack (added 28 Nov 2026)
+
+- File: `products/citizenship-test-practice-pack.pdf` in the project files (source: `products/src/citizenship/`, rebuild with
+  `python3 make_pack.py` then `node ../make-citizenship-pdf.js`).
+- Stripe: Product catalogue > Add product, name **Australian Citizenship Test Practice Pack**, one-off **A$9.00**, tax code
+  Electronically Supplied Services, Payment Link with "after payment" redirect to the PDF's Google Drive link (steps 2 and 3 above).
+- Paste the link into `config.json` > `shop.products` > `citizenship-test-practice-pack` > `stripe_link`.
+- It is unofficial practice material: never call it official, never copy text from the government's "Our Common Bond" booklet, and keep
+  the notice on the sales page.

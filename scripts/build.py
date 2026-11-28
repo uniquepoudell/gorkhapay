@@ -159,7 +159,7 @@ def page_shell(cfg: dict, title: str, body: str, *, description: str, path: str,
     nav = [("index.html", "Compare"), ("send-money.html", "Send money"), ("guides/index.html", "Guides"), ("https://uniquepoudell.github.io/takehome/", "Pay calculator"),
            ("about.html", "About")]
     if products_on_sale(cfg):
-        nav.insert(3, ("products/index.html", "Checklists"))
+        nav.insert(3, ("products/index.html", "Shop"))
     current = ' aria-current="page"'
     nav_html = "".join(
         f'<a href="{href if href.startswith("http") else up + href}"{current if href == path else ""}>{label}</a>' for href, label in nav)
@@ -401,6 +401,12 @@ before making decisions.</p>
                       description="About GorkhaPay, how we earn money, and our disclaimer.")
 
 
+DEFAULT_NOTICE = ("This is a checklist of general information, not tax, legal or migration advice. Every official service it "
+                  "points to (tax file number, tax return, super claim, bond refund) is free from the government. You are paying for "
+                  "a clear, printable plan in one place. For advice on your own situation, see a registered tax agent or a registered "
+                  "migration agent.")
+
+
 def render_product(cfg: dict, p: dict) -> str:
     s = cfg["site"]
     includes = "".join(f"<li>{esc(x)}</li>" for x in p.get("includes", []))
@@ -428,7 +434,11 @@ def render_product(cfg: dict, p: dict) -> str:
   </ol>
 </div>""")
     if not buy:
-        buy.append('<div class="box buy"><h3>Coming soon</h3><p>This checklist is not on sale yet.</p></div>')
+        buy.append('<div class="box buy"><h3>Coming soon</h3><p>This is not on sale yet.</p></div>')
+    sample = (p.get("free_sample_url") or "").strip()
+    if sample:
+        buy.append(f'<div class="box"><h3>Try it free first</h3><p>{esc(p.get("free_sample_text") or "Try a free sample before you buy.")}</p>'
+                   f'<a class="btn secondary" href="{esc(sample)}" rel="noopener">Try the free sample</a></div>')
     jsonld = ""
     if sells_aud(p):
         data = {"@context": "https://schema.org", "@type": "Product", "name": p["title"],
@@ -437,7 +447,7 @@ def render_product(cfg: dict, p: dict) -> str:
                            "availability": "https://schema.org/InStock", "url": p["stripe_link"].strip()}}
         jsonld = f'\n<script type="application/ld+json">{json.dumps(data, ensure_ascii=False)}</script>'
     body = f"""<article class="product">
-<p class="crumbs"><a href="index.html">Checklists</a></p>
+<p class="crumbs"><a href="index.html">Shop</a></p>
 <h1>{esc(p['title'])}</h1>
 <p class="ne-title">{esc(p.get('title_ne'))}</p>
 <p class="lead">{esc(p['summary'])}</p>
@@ -455,11 +465,8 @@ def render_product(cfg: dict, p: dict) -> str:
 </div>
 <section class="box notice">
   <h2>Please read before you buy</h2>
-  <p>This is a checklist of general information, not tax, legal or migration advice. Every official service it
-  points to (tax file number, tax return, super claim, bond refund) is free from the government. You are paying for
-  a clear, printable plan in one place. For advice on your own situation, see a registered tax agent or a registered
-  migration agent. Because this is a digital download, please ask us before you buy if you're unsure it suits you.
-  Your rights under Australian Consumer Law still apply.</p>
+  <p>{esc(p.get('notice') or DEFAULT_NOTICE)} Because this is a digital download, please ask us before you buy if
+  you're unsure it suits you. Your rights under Australian Consumer Law still apply.</p>
 </section>
 {f'<section><h2>Free guides on this topic</h2><ul>{free}</ul></section>' if free else ''}
 </article>"""
@@ -474,11 +481,11 @@ def render_shop(cfg: dict) -> str:
         price = f'<p class="price">{money(p["price_aud"], "AUD")}</p>' if sells_aud(p) else ""
         items.append(f'<li class="box"><h2><a href="{esc(p["slug"])}.html">{esc(p["title"])}</a>{status}</h2>'
                      f'<p class="muted small">{esc(p.get("title_ne"))}</p><p>{esc(p["summary"])}</p>{price}</li>')
-    body = ('<section class="hero"><h1>Checklists</h1><p class="lead">Printable money checklists for Nepalis moving to '
-            'or leaving Australia, made by GorkhaPay. English with Nepali summaries.</p></section>'
+    body = ('<section class="hero"><h1>Shop</h1><p class="lead">Printable checklists and practice packs for Nepalis moving to, '
+            'living in or leaving Australia, made by GorkhaPay. English with Nepali explanations.</p></section>'
             f'<ul class="cards one">{"".join(items)}</ul>')
-    return page_shell(cfg, "Checklists", body, path="products/index.html", depth=1, noindex=not products_on_sale(cfg),
-                      description="Printable money checklists for Nepalis moving to or leaving Australia.")
+    return page_shell(cfg, "Shop", body, path="products/index.html", depth=1, noindex=not products_on_sale(cfg),
+                      description="Printable checklists and practice packs for Nepalis moving to, living in or leaving Australia.")
 
 
 # --------------------------------------------------------------------------- build

@@ -42,13 +42,13 @@ def main():
         sitemap = (out / "sitemap.xml").read_text()
         for prod in cfg["shop"]["products"]:
             page = (out / "products" / f"{prod['slug']}.html").read_text(encoding="utf-8")
-            assert "not tax, legal or migration advice" in page
+            assert "not tax, legal or migration advice" in page or "unofficial practice material" in page
             if build.on_sale(cfg, prod):
                 assert "noindex" not in page and "Buy now" in page and prod["slug"] in sitemap
             else:
                 assert 'name="robots" content="noindex"' in page and "Buy now" not in page
                 assert prod["slug"] not in sitemap
-        assert ("Checklists" in index) == bool(build.products_on_sale(cfg))
+        assert (">Shop</a>" in index) == bool(build.products_on_sale(cfg))
 
     # shop: once the owner fills in prices, a Stripe link and a QR, the product goes on sale
     sale = json.loads(json.dumps(cfg))
@@ -68,7 +68,7 @@ def main():
         assert '"priceCurrency": "AUD"' in page and (out / "static/favicon.svg").exists()
         other = (out / "products" / f"{sale['shop']['products'][1]['slug']}.html").read_text(encoding="utf-8")
         assert "noindex" in other and "Buy now" not in other
-        assert "Checklists" in (out / "index.html").read_text(encoding="utf-8")
+        assert ">Shop</a>" in (out / "index.html").read_text(encoding="utf-8")
         sitemap = (out / "sitemap.xml").read_text()
         assert prod["slug"] in sitemap and sale["shop"]["products"][1]["slug"] not in sitemap
         related = (out / "guides" / f"{prod['related_guides'][0]}.html").read_text(encoding="utf-8")

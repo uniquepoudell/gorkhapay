@@ -279,6 +279,32 @@
         "stripe_link": "https://buy.stripe.com/3cI8wRgJg7MVfob8l6gnK03",
         "price_npr": 450,
         "npr_qr_image": ""
+      },
+      {
+        "slug": "citizenship-test-practice-pack",
+        "title": "Australian Citizenship Test Practice Pack (with Nepali explanations)",
+        "title_ne": "अस्ट्रेलियाली नागरिकता परीक्षा अभ्यास पुस्तिका (नेपालीमा व्याख्यासहित)",
+        "summary": "100 original practice questions in English, the language of the real test, with a Nepali explanation for every answer. Five full practice tests in the real test's format.",
+        "for_who": "Nepali permanent residents in Australia getting ready for the citizenship test, and family members helping them study.",
+        "format": "Printable PDF, 30 pages, English questions with Nepali explanations",
+        "includes": [
+          "5 full practice tests of 20 questions, in the same format as the real test (45 minutes, 15 of 20 to pass)",
+          "All 4 test topics: Australia and its people, democratic beliefs and rights, government and the law, Australian values",
+          "Every Australian values question marked, because you must get all 5 right to pass",
+          "Answer and a plain Nepali explanation for every question, so you learn the reason, not just the letter",
+          "A two-week study plan and test day tips",
+          "English and Nepali word list of 30 key terms, capitals and key dates",
+          "Score sheets to track your progress"
+        ],
+        "related_guides": [],
+        "facts_checked": "2026-11-28",
+        "notice": "This is unofficial practice material. It is not made by, linked to or endorsed by the Australian Government or the Department of Home Affairs, and these are not the real test questions. The real test is based on the official booklet \"Australian Citizenship: Our Common Bond\", which is free on the Home Affairs website, together with a free official online practice test. Use them as well as this pack. This is not migration advice.",
+        "free_sample_url": "https://uniquepoudell.github.io/newsnepal/citizenship-test.html",
+        "free_sample_text": "10 free questions with Nepali explanations on News Nepal.",
+        "price_aud": 9,
+        "stripe_link": "",
+        "price_npr": 900,
+        "npr_qr_image": ""
       }
     ]
   }
